@@ -1,0 +1,6 @@
+.seleccion:hover{
+    background-color: rgba(121, 241, 201, 0.5);
+}
+.selected{
+    background-color:aquamarine;
+}
