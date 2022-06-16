@@ -1,4 +1,3 @@
-import React from 'react';
 import './App.css';
 import { Navbar } from './components/Navbar';
 import { TableAPI } from './components/TableApi';
@@ -9,7 +8,7 @@ function App() {
 
   return (
       <TableProvider >
-      <div className="bg-dark text-white vh-100">
+      <div className="">
       <Navbar />
       <TableAPI />
       </div>

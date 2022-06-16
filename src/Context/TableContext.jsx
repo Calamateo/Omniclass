@@ -22,12 +22,21 @@ function TableProvider(props){
   const [material, setMaterial] = React.useState('');
   const [vistaParcial, setVistaParcial] = React.useState({})
   const [formularioActivate, setFormularioActivate] = React.useState(false);
-  const [valorEsfuerzo, setValorEsfuerzo] = React.useState([])
-  const [listarEsfuerzo, setListarEsfuerzo] = React.useState([])
+  const [listarEsfuerzo,  setListarEsfuerzo] = React.useState([])
+  const [listarValorEsfuerzo, setListarValorEsfuerzo] = React.useState([])
   const [listarUnidadesMedida, setListarUnidadesMedida] = React.useState([])
   const [listarTipoResistencia, setListarTipoResistencia] = React.useState([])
   const [listarAplPrincipales, setListarAplPrincipales] = React.useState([])
-
+  const [listarTMA, setListarTMA] = React.useState([])
+  const [listarRevenimiento, setListarRevenimiento] = React.useState([])
+  const [listarDensidad, setListarDensidad] = React.useState([])
+  const [listarSistColocacion, setListarSistColocacion] = React.useState([])
+  const [listarClasExposicion, setListarClasExposicion] = React.useState([])
+  const [listarFlujoRev, setListarFlujoRev] = React.useState([])
+  const [listarIonCloruro, setListarIonCloruro] = React.useState([])
+  const [listarFibraConcre, setListarFibraConcre] = React.useState([])
+  
+  
 
   //UseEffect initializes the Api
   React.useEffect(() => {
@@ -77,9 +86,13 @@ function TableProvider(props){
     const numero = materialsData.count + 1;
     await setMaterial(String(numero).padStart(5,0));
 
+    const listarEsfuerzo = await fetch(`${URL}ListarEsfuerzo/`)
+    const listarEsfuerzoData = await listarEsfuerzo.json();
+    await setListarEsfuerzo(listarEsfuerzoData.results);
+
     const esfuerzo = await fetch(`${URL}ListarValorEsfuerzo/`)
     const esfuerzoData = await esfuerzo.json();
-    await setValorEsfuerzo(esfuerzoData.results);
+    await setListarValorEsfuerzo(esfuerzoData.results);
     
     const listarUnidad = await fetch(`${URL}ListarUnidadesMedida/`)
     const listarUnidadData = await listarUnidad.json();
@@ -93,7 +106,37 @@ function TableProvider(props){
     const listarAplPrincipalesData = await listarAplPrincipales.json();
     await setListarAplPrincipales(listarAplPrincipalesData.results);
 
-   
+    const listarTMA = await fetch(`${URL}ListarTMA/`)
+    const listarTMAData = await listarTMA.json();
+    await setListarTMA(listarTMAData.results);
+
+    const listarRevenimiento = await fetch(`${URL}ListarRevenimiento/`)
+    const listarRevenimientoData = await listarRevenimiento.json();
+    await setListarRevenimiento(listarRevenimientoData.results);
+
+    const listarDensidad = await fetch(`${URL}ListarDensidad/`)
+    const listarDensidadData = await listarDensidad.json();
+    await setListarDensidad(listarDensidadData.results);
+
+    const listarSistColocacion = await fetch(`${URL}ListarSistColocacion/`)
+    const listarSistColocacionData = await listarSistColocacion.json();
+    await setListarSistColocacion(listarSistColocacionData.results);
+
+    const listarClasExposicion = await fetch(`${URL}ListarClasExposicion/`)
+    const listarClasExposicionData = await listarClasExposicion.json();
+    await setListarClasExposicion(listarClasExposicionData.results);
+    
+    const listarFlujoRev = await fetch(`${URL}ListarFlujoRev/`)
+    const listarFlujoRevData = await listarFlujoRev.json();
+    await setListarFlujoRev(listarFlujoRevData.results);
+    
+    const listarIonCloruro = await fetch(`${URL}ListarIonCloruro/`)
+    const listarIonCloruroData = await listarIonCloruro.json();
+    await setListarIonCloruro(listarIonCloruroData.results);
+    
+    const listarFibraConcre = await fetch(`${URL}ListarFibraConcre/`)
+    const listarFibraConcreData = await listarFibraConcre.json();
+    await setListarFibraConcre(listarFibraConcreData.results);
 
   };
 
@@ -207,6 +250,11 @@ function TableProvider(props){
   }
 
   const getVistaParcial = async (codigo) => {
+    const materials = await fetch(`${URL}Materiales/`)
+    const materialsData = await materials.json();
+    const numero = materialsData.count + 1;
+    await setMaterial(String(numero).padStart(5,0));
+
     const reg = datos.filter(reg => reg.Codigo === codigo)
     await setVistaParcial(reg)
     console.table(vistaParcial)
@@ -228,12 +276,20 @@ function TableProvider(props){
         vistaParcial,
         formularioActivate,
         material, 
-        valorEsfuerzo,
         listarEsfuerzo,
+        listarValorEsfuerzo,
         listarUnidadesMedida,
         listarTipoResistencia,
         listarAplPrincipales,
-    }}>
+        listarTMA,
+        listarRevenimiento,
+        listarDensidad,
+        listarSistColocacion,
+        listarClasExposicion,
+        listarFlujoRev,
+        listarIonCloruro,
+        listarFibraConcre,
+      }}>
         {props.children}
     </TableContext.Provider>
 );

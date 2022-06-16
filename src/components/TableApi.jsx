@@ -29,7 +29,7 @@ const {
       }
       {/* <h2>Nivel {niveles-1} <h3>{descripcion}</h3></h2> */}
 
-    <table className="table text-white" id="tableMaterials">
+    <table className="table" id="tableMaterials">
   <thead>
     <tr>
       <th scope="col">ID</th>
@@ -50,8 +50,8 @@ const {
                 {
                   
                   item.regFinal ?
-                  <td><button type="button" className="btn btn-secondary btn-sm" onClick={() =>getVistaParcial(item.Codigo)}>Seleccionar</button></td> :
-                  <td><button type="button" className="btn btn-secondary btn-sm" onClick={() =>{setDescripcion(item.descriSpa); getNiveles(item.idOmc23N1? item.idOmc23N1 : item.idOmc23N2 ? item.idOmc23N2 : item.idOmc23N3? item.idOmc23N3 : item.idOmc23N4 ? item.idOmc23N4 : item.idOmc23N5 ? item.idOmc23N5 : item.idOmc23N6);}}>{item.regFinal ? 'Seleccionar' : `Nivel ${niveles}`}</button> </td>
+                  <td><button type="button" className="btn btn-info btn-sm" onClick={() =>getVistaParcial(item.Codigo)}>Seleccionar</button></td> :
+                  <td><button type="button" className="btn btn-dark btn-sm" onClick={() =>{setDescripcion(item.descriSpa); getNiveles(item.idOmc23N1? item.idOmc23N1 : item.idOmc23N2 ? item.idOmc23N2 : item.idOmc23N3? item.idOmc23N3 : item.idOmc23N4 ? item.idOmc23N4 : item.idOmc23N5 ? item.idOmc23N5 : item.idOmc23N6);}}>{item.regFinal ? 'Seleccionar' : `Nivel ${niveles}`}</button> </td>
                 }
             </tr>
         ))
@@ -61,7 +61,7 @@ const {
       </section>
 
     {
-      formularioActivate ? <VistaParcial /> : "hola"
+      formularioActivate ? <VistaParcial /> : ""
     }
 
   </React.Fragment>
