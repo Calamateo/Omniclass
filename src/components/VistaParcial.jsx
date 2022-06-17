@@ -6,6 +6,8 @@ function VistaParcial() {
     formularioActivate,
     vistaParcial,
     material,
+    concreto,
+    numMaterial,
     listarEsfuerzo,
     listarValorEsfuerzo,
     listarUnidadesMedida,
@@ -18,6 +20,7 @@ function VistaParcial() {
     listarClasExposicion,
     listarFlujoRev,
     listarIonCloruro,
+    setFormularioActivate,
     listarFibraConcre,
   } = React.useContext(TableContext);
 
@@ -40,31 +43,145 @@ function VistaParcial() {
   const [uElasticidad, setUElasticidad]= React.useState('')
   const [ionCloruro, setIonCloruro]= React.useState('')
   const [fibra, setFibra]= React.useState('')
-  const [color, setColor]= React.useState('')
+  const [abreviado, setAbreviado] = React.useState('')
+  const [elasticidad, setElasticidad] = React.useState('')
+  const [edad, setEdad] = React.useState('')
+  const [capilar, setCapilar] = React.useState('')
+  const [abreviado2, setAbreviado2] = React.useState('')
+  const [trabajabilidad, setTrabajabilidad] = React.useState('')
+  const [clase, setClase] = React.useState('')
+  const [color, setColor] = React.useState('')
+  const [comportamiento, setComportamiento] = React.useState('')
+  const [contenido, setContenido] = React.useState('')
+  const [contenidoIon, setContenidoIon] = React.useState('')
+  const [tiempoDePrueba, setTiempoDePrueba] = React.useState('')
+  const [palabrasClave, setPalabrasClave] = React.useState('')
+  const [comentarios, setComentarios] = React.useState('')
 
-  console.log(color);
-  const datosGenerales = () => {
-    const datosGeneralesdata = {
-    esfuerzo,
-    valorEsfuerzo,
-    uValorEsfuerzo,
-    resistenciaValorEsfuerzo,
-    aplPrincipales,
-    TMA,
-    uTMA,
-    revenimiento,
-    uRevenimiento,
-    densidad,
-    uDensidad,
-    sisColocacion,
-    clasExposicion,
-    flujoRev,
-    uFlujoRev,
-    uElasticidad,
-    ionCloruro,
-    fibra,
+
+  const crearDatosDeMateriales = () => {
+      creatMaterial();
+      
+      setTimeout(() => {  
+        crearConcreto();
+      }, 1000);
+      
+      setTimeout(() => {
+        caracteristicasEspeciales();  
+      }, 1600);
+      
+      
+      setFormularioActivate(false);
+  }
+  
+  const creatMaterial = () => {
+    const datas = {
+      "numMat": 1,
+      "codigoOmc": vistaParcial[0].Codigo,
+      "Consecutivo": material,
+      "descriCorta": vistaParcial[0].descriSpa.substr(0,100),
+      "descriLarga": vistaParcial[0].descriSpa,
+      "Comentarios": comentarios,
+      "palabrasCve": palabrasClave,
+      "codigoBimsa": null,
     }
-    console.table(datosGeneralesdata);
+    
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  var raw = JSON.stringify(datas);
+
+  var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+  };
+
+  fetch("http://127.0.0.1:8000/api/v1/CrearMaterial/", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+
+  }
+
+  const crearConcreto = () => {
+    const codigo = vistaParcial[0].Codigo;
+
+    const datas = {
+      "numMat": 0,
+      "Codigo": codigo,
+      "fk_Material": numMaterial,
+      "fk_ClasExpo": clasExposicion,
+      "fk_SistColoc": sisColocacion,
+      "fk_Densidad": densidad,
+      "fk_Reven": revenimiento,
+      "fk_FlujoRev": flujoRev,
+      "fk_FibraConcre": fibra,
+      "fk_ValEsf": valorEsfuerzo,
+      "fk_Tma": TMA,
+      "fk_AplPrinc": aplPrincipales,
+    }
+    //concreto
+    console.table(datas)
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+  
+    var raw = JSON.stringify(datas);
+  
+    var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+    };
+  
+    fetch("http://127.0.0.1:8000/api/v1/CrearConcreto/", requestOptions)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+
+  }
+
+  const caracteristicasEspeciales = () => {
+    console.log(concreto);
+    const datas = {
+      modElast:elasticidad,
+      Acronimo:abreviado,
+      Edad:edad,
+      absorcionCap:capilar, 
+      Acronimo2:abreviado2,
+      trabaExtend:trabajabilidad,
+      Clase:clase,
+      Color:color,
+      Comportamiento:comportamiento,
+      conAire:contenido,
+      conIonClor:contenidoIon,
+      tiempoPrueba:tiempoDePrueba,
+      fk_IonClor:ionCloruro,
+      fk_Concreto:concreto,    
+    };
+    //caracteristica especial
+    console.table(datas)
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  var raw = JSON.stringify(datas);
+
+  var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+  };
+
+  fetch("http://127.0.0.1:8000/api/v1/CrearCaracEspe/", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+
   }
 
   return (
@@ -120,7 +237,7 @@ function VistaParcial() {
           <select onChange={e => setEsfuerzo(e.target.value)} className="form-select form-select-sm" name="idEsfuerzo">
             <option >Selecciona...</option>
             {listarEsfuerzo.map((value, index) => (
-              <option key={index} value={value.tipoEsfuerzo}>
+              <option key={index} value={value.idEsfuerzo}>
                 {value.tipoEsfuerzo}
               </option>
             ))}
@@ -132,7 +249,7 @@ function VistaParcial() {
           <select onChange={e => setValorEsfuerzo(e.target.value)} className="form-select form-select-sm" name="idValEsf">
             <option value="">Selecciona...</option>
             {listarValorEsfuerzo.map((valorEs, index) => (
-              <option key={index} value={valorEs.Valor}>
+              <option key={index} value={valorEs.idValEsf}>
                 {valorEs.Valor}
               </option>
             ))}
@@ -144,7 +261,7 @@ function VistaParcial() {
           <select onChange={e => setUValorEsfuerzo(e.target.value)} className="form-select form-select-sm" name="idUniMedVE">
             <option value="">Selecciona...</option>
             {listarUnidadesMedida.map((value, index) => (
-              <option key={index} value={value.Unidad}>
+              <option key={index} value={value.idUniMed}>
                 {value.Unidad}
               </option>
             ))}
@@ -156,7 +273,7 @@ function VistaParcial() {
           <select onChange={e => setResistenciaValorEsfuerzo(e.target.value)} className="form-select form-select-sm" name="idTipoResist">
             <option value="">Selecciona...</option>
             {listarTipoResistencia.map((value, index) => (
-              <option key={index} value={value.Tipo}>
+              <option key={index} value={value.idTipoResist}>
                 {value.Tipo}
               </option>
             ))}
@@ -168,7 +285,7 @@ function VistaParcial() {
           <select onChange={e => setAplPrincipales(e.target.value)} className="form-select form-select-sm" name="idAplPrinc">
             <option value="">Selecciona...</option>
             {listarAplPrincipales.map((value, index) => (
-              <option key={index} value={value.aplicaciones}>
+              <option key={index} value={value.idAplPrinc}>
                 {value.aplicaciones}
               </option>
             ))}
@@ -183,7 +300,7 @@ function VistaParcial() {
           <select onChange={e => setTMA(e.target.value)} className="form-select form-select-sm" name="idTma">
             <option value="">Selecciona...</option>
             {listarTMA.map((value, index) => (
-              <option key={index} value={value.valTma}>
+              <option key={index} value={value.idTma}>
                 {value.valTma}
               </option>
             ))}
@@ -195,7 +312,7 @@ function VistaParcial() {
           <select onChange={e => setUTMA(e.target.value)} className="form-select form-select-sm" name="idUniMedTMA">
             <option value="">Selecciona...</option>
             {listarUnidadesMedida.map((value, index) => (
-              <option key={index} value={value.Unidad}>
+              <option key={index} value={value.idUniMed}>
                 {value.Unidad}
               </option>
             ))}
@@ -207,7 +324,7 @@ function VistaParcial() {
           <select onChange={e => setRevenimiento(e.target.value)} className="form-select form-select-sm" name="idReven">
             <option value="">Selecciona...</option>
             {listarRevenimiento.map((value, index) => (
-              <option key={index} value={value.valRev}>
+              <option key={index} value={value.idReven}>
                 {value.valRev}
               </option>
             ))}
@@ -219,7 +336,7 @@ function VistaParcial() {
           <select onChange={e => setURevenimiento(e.target.value)} className="form-select form-select-sm" name="idUniMedR">
             <option value="">Selecciona...</option>
             {listarUnidadesMedida.map((value, index) => (
-              <option key={index} value={value.Unidad}>
+              <option key={index} value={value.idUniMed}>
                 {value.Unidad}
               </option>
             ))}
@@ -235,7 +352,7 @@ function VistaParcial() {
           <select onChange={e => setDensidad(e.target.value)} className="form-select form-select-sm" name="idDensidad">
             <option value="">Selecciona...</option>
             {listarDensidad.map((value, index) => (
-              <option key={index} value={value.valDensidad}>
+              <option key={index} value={value.idDensidad}>
                 {value.valDensidad}
               </option>
             ))}
@@ -247,7 +364,7 @@ function VistaParcial() {
           <select onChange={e => setUDensidad(e.target.value)} className="form-select form-select-sm" name="idUniMedD">
             <option value="">Selecciona...</option>
             {listarUnidadesMedida.map((value, index) => (
-              <option key={index} value={value.Unidad}>
+              <option key={index} value={value.idUniMed}>
                 {value.Unidad}
               </option>
             ))}
@@ -259,7 +376,7 @@ function VistaParcial() {
           <select onChange={e => setSisColocacion(e.target.value)} className="form-select form-select-sm" name="idSistColoc">
             <option value="">Selecciona...</option>
             {listarSistColocacion.map((value, index) => (
-              <option key={index} value={value.tipoSistema}>
+              <option key={index} value={value.idSistColoc}>
                 {value.tipoSistema}
               </option>
             ))}
@@ -271,7 +388,7 @@ function VistaParcial() {
           <select onChange={e => setClasExposicion(e.target.value)} className="form-select form-select-sm" name="idClasExpo">
             <option value="">Selecciona...</option>
             {listarClasExposicion.map((value, index) => (
-              <option key={index} value={value.Clase}>
+              <option key={index} value={value.idClasExpo}>
                 {value.Condicion}
               </option>
             ))}
@@ -283,7 +400,7 @@ function VistaParcial() {
           <select onChange={e => setFlujoRev(e.target.value)} className="form-select form-select-sm" name="idFlujoRev">
             <option value="">Selecciona...</option>
             {listarFlujoRev.map((value, index) => (
-              <option key={index} value={value.valFluRev}>
+              <option key={index} value={value.idFlujoRev}>
                 {value.valFluRev}
               </option>
             ))}
@@ -295,7 +412,7 @@ function VistaParcial() {
           <select onChange={e => setUFlujoRev(e.target.value)} className="form-select form-select-sm" name="idUniMedFR">
             <option value="">Selecciona...</option>
             {listarUnidadesMedida.map((value, index) => (
-              <option key={index} value={value.Unidad}>
+              <option key={index} value={value.idUniMed}>
                 {value.Unidad}
               </option>
             ))}
@@ -310,19 +427,19 @@ function VistaParcial() {
         <form className="row gy-2 justify-content-start align-items-end form">
 
           <div className="col-3">
-          <label className="form-label" htmlFor="Abreviado">Abreviado:</label>
-          <input className="form-control form-control-sm" id="Abreviado" type="text" placeholder="" aria-label=""></input>
+          <label className="form-label" htmlFor="Abreviado">Acronimo del modulo de elasticidad:</label>
+          <input className="form-control form-control-sm" onChange={e => setAbreviado(e.target.value)} id="Abreviado" type="text" placeholder="" aria-label=""></input>
           </div>
 
           <div className="col-3">
-          <label className="form-label" htmlFor="elasticidad">Modulo de Elasticidad:</label>
-          <input className="form-control form-control-sm" id="elasticidad" type="number" placeholder="" aria-label=""></input>
+          <label className="form-label" htmlFor="elasticidad">Valor de modulo de elasticidad:</label>
+          <input className="form-control form-control-sm" id="elasticidad" type="number" onChange={e => setElasticidad(e.target.value)} placeholder="" aria-label=""></input>
           </div>
 
           <div className="col-3">
-            <label className="form-label" htmlFor="elasticidad">Edad en dias:</label>
+            <label className="form-label" htmlFor="elasticidad">Edad de resistencia especificada:</label>
             <div className="input-group">
-              <input type="number" aria-label="Last name" className="form-control form-control-sm"/>
+              <input onChange={e => setEdad(e.target.value)} type="number" aria-label="Last name" className="form-control form-control-sm"/>
               <select onChange={e => setUElasticidad(e.target.value)} className="form-select form-control-sm" id="inputGroupSelect01">
               <option >Tiempo</option>
               <option defaultValue="1">Horas</option>
@@ -333,22 +450,22 @@ function VistaParcial() {
 
           <div className="col-3">
           <label className="form-label" htmlFor="elasticidad">Absorción Capilar:</label>
-          <input className="form-control form-control-sm" id="elasticidad" type="number" placeholder="" aria-label=""></input>
+          <input className="form-control form-control-sm" onChange={e => setCapilar(e.target.value)} id="elasticidad" type="number" placeholder="" aria-label=""></input>
           </div>
 
           <div className="col-3">
-          <label className="form-label" htmlFor="elasticidad">Abreviado 2:</label>
-          <input className="form-control form-control-sm" id="elasticidad" type="text" placeholder="" aria-label=""></input>
+          <label className="form-label" htmlFor="elasticidad">Acronimo de asobcion capilar:</label>
+          <input className="form-control form-control-sm" id="elasticidad" onChange={e => setAbreviado2(e.target.value)} type="text" placeholder="" aria-label=""></input>
           </div>
 
           <div className="col-3">
           <label className="form-label" htmlFor="elasticidad">Trabajabilidad Extendida:</label>
-          <input className="form-control form-control-sm" id="elasticidad" type="number" placeholder="" aria-label=""></input>
+          <input className="form-control form-control-sm" id="elasticidad" type="number" onChange={e =>setTrabajabilidad(e.target.value)} placeholder="" aria-label=""></input>
           </div>
 
           <div className="col-3">
           <label className="form-label" htmlFor="elasticidad">Clase(NTC-CDMX):</label>
-          <input className="form-control form-control-sm" id="elasticidad" type="text" placeholder="" aria-label=""></input>
+          <input className="form-control form-control-sm" id="elasticidad" type="text" placeholder="" onChange={e=>setClase(e.target.value)} aria-label=""></input>
           </div>
 
           <div className="col-3">
@@ -358,17 +475,17 @@ function VistaParcial() {
 
           <div className="col-3">
           <label className="form-label" htmlFor="elasticidad">Comportamiento:</label>
-          <input className="form-control form-control-sm" id="elasticidad" type="text" placeholder="" aria-label=""></input>
+          <input className="form-control form-control-sm" id="elasticidad" type="text" onChange={e => setComportamiento(e.target.value)} placeholder="" aria-label=""></input>
           </div>
 
           <div className="col-3">
           <label className="form-label" htmlFor="elasticidad">Contenido de aire:</label>
-          <input className="form-control form-control-sm" id="elasticidad" type="text" placeholder="" aria-label=""></input>
+          <input className="form-control form-control-sm" id="elasticidad" type="number" onChange={e=> setContenido(e.target.value)} placeholder="" aria-label=""></input>
           </div>
 
           <div className="col-3">
           <label className="form-label" htmlFor="elasticidad">Contenido de Ion Cloruro:</label>
-          <input className="form-control form-control-sm" id="elasticidad" type="number" placeholder="" aria-label=""></input>
+          <input className="form-control form-control-sm" id="elasticidad" type="number" onChange={e => setContenidoIon(e.target.value)} placeholder="" aria-label=""></input>
           </div>
 
           <label className="col-md-3 control-label">
@@ -376,7 +493,7 @@ function VistaParcial() {
             <select onChange={e => setIonCloruro(e.target.value)} className="form-select form-select-sm" name="idIonClor">
               <option value="">Selecciona...</option>
               {listarIonCloruro.map((value, index) => (
-                <option key={index} value={value.tipoPenet}>
+                <option key={index} value={value.idIonClor}>
                   {value.tipoPenet} {value.cargaPesada} Coulomb
                 </option>
               ))}
@@ -384,7 +501,7 @@ function VistaParcial() {
           </label>
           <div className="col-3">
           <label className="form-label" htmlFor="elasticidad">  Tiempo de Prueba del ensayo Ion Cloruro:</label>
-          <input className="form-control form-control-sm" id="elasticidad" type="number" placeholder="" aria-label=""></input>
+          <input className="form-control form-control-sm" id="elasticidad" onChange={e => setTiempoDePrueba(e.target.value)} type="number" placeholder="" aria-label=""></input>
           </div>
 
           <label className="col-md-3 control-label">
@@ -392,7 +509,7 @@ function VistaParcial() {
             <select onChange={e => setFibra(e.target.value)} className="form-select form-select-sm" name="idFibraConcre">
               <option value="">Selecciona...</option>
               {listarFibraConcre.map((value, index) => (
-                <option key={index} value={value.Fibras}>
+                <option key={index} value={value.idFibraCon}>
                   {value.Fibras}
                 </option>
               ))}
@@ -406,7 +523,7 @@ function VistaParcial() {
             <label htmlFor="keyword" className="form-label">
               Palabras Clave:
             </label>
-            <textarea id="keyword" className="form-control" rows="2"></textarea>
+            <textarea id="keyword" onChange={e => setPalabrasClave(e.target.value)} className="form-control" rows="2"></textarea>
           </div>
           <div className="col-md-6">
             <label htmlFor="comentarios" className="form-label">
@@ -416,10 +533,11 @@ function VistaParcial() {
               className="form-control"
               id="comentarios"
               row="3"
+              onChange={e => setComentarios(e.target.value)}
             ></textarea>
           </div>
         </div>
-        <button type="submit" className="btn btn-success mt-5" onClick={datosGenerales}>
+        <button type="submit" className="btn btn-success mt-5" onClick={crearDatosDeMateriales}>
           Registrar
         </button>
       </div>

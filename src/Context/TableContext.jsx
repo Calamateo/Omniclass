@@ -20,6 +20,8 @@ function TableProvider(props){
   const [nivel6, setNivel6] = React.useState([]);
   const [informacion, setInformacion] = React.useState([]);
   const [material, setMaterial] = React.useState('');
+  const [numMaterial, setNumMaterial] = React.useState('');
+  const [concreto, setConcreto] = React.useState('');
   const [vistaParcial, setVistaParcial] = React.useState({})
   const [formularioActivate, setFormularioActivate] = React.useState(false);
   const [listarEsfuerzo,  setListarEsfuerzo] = React.useState([])
@@ -254,13 +256,13 @@ function TableProvider(props){
     const materialsData = await materials.json();
     const numero = materialsData.count + 1;
     await setMaterial(String(numero).padStart(5,0));
-
+    await setNumMaterial(numero);
+    const concreto = await fetch(`${URL}Concreto/`)
+    const concretoData = await concreto.json();
+    const numeroConcreto = concretoData.count + 1;
+    await setConcreto(numeroConcreto);
     const reg = datos.filter(reg => reg.Codigo === codigo)
     await setVistaParcial(reg)
-    console.table(vistaParcial)
-    console.table(reg)
-    console.log(reg[0].Codigo);
-    console.log(reg);
     setFormularioActivate(true)
   }
   return (    
@@ -276,6 +278,8 @@ function TableProvider(props){
         vistaParcial,
         formularioActivate,
         material, 
+        concreto,
+        numMaterial,
         listarEsfuerzo,
         listarValorEsfuerzo,
         listarUnidadesMedida,
@@ -287,6 +291,7 @@ function TableProvider(props){
         listarSistColocacion,
         listarClasExposicion,
         listarFlujoRev,
+        setFormularioActivate,
         listarIonCloruro,
         listarFibraConcre,
       }}>
@@ -295,4 +300,4 @@ function TableProvider(props){
 );
 }
 
-export {TableContext , TableProvider }
+export {TableContext , TableProvider } 
