@@ -46,8 +46,8 @@ function TableProvider(props){
   }, []);
 
   //URL base for API requests
-  const URL = 'http://127.0.0.1:8000/api/v1/';
-  // const URL = 'http://msdocs-python-test-webapp-117.azurewebsites.net/api/v1/';
+  // const URL = 'http://127.0.0.1:8000/api/v1/';
+  const URL = 'http://msdocs-python-test-webapp-117.azurewebsites.net/api/v1/';
   
   //Get API
   const fetchData = async () => {
