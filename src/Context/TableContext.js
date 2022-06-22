@@ -46,12 +46,19 @@ function TableProvider(props){
   }, []);
 
   //URL base for API requests
-  const URL = 'http://127.0.0.1:8000/api/v1/';
-
+  // const URL = 'http://127.0.0.1:8000/api/v1/';
+  const URL = 'http://msdocs-python-test-webapp-117.azurewebsites.net/api/v1/';
+  
   //Get API
   const fetchData = async () => {
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+      headers: { 'Accept': 'application/json', 'Access-Control-Allow-Origin': '*'  }
+    };
+    
     //Level 1 data
-    const data = await fetch(`${URL}OMC23Nivel1/`)
+    const data = await fetch(`${URL}OMC23Nivel1/`,)
     const users = await data.json();
     await setNivel1(users.results);    
     await console.table(users.results);

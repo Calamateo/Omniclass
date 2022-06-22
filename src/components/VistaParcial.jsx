@@ -233,7 +233,7 @@ comentarios,
 
 
   return (
-    <div className="container">
+    <div className="container bg-light border">
       <br />
       <hr />
       <br />
