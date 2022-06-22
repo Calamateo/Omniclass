@@ -51,11 +51,6 @@ function TableProvider(props){
   
   //Get API
   const fetchData = async () => {
-    var requestOptions = {
-      method: 'GET',
-      redirect: 'follow',
-      headers: { 'Accept': 'application/json', 'Access-Control-Allow-Origin': '*'  }
-    };
     
     //Level 1 data
     const data = await fetch(`${URL}OMC23Nivel1/`,)
