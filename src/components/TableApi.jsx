@@ -1,11 +1,9 @@
-import React from "react";
-import { TableContext } from "../Context/TableContext";
-import './TableApi.css';
-import { VistaParcial } from "./VistaParcial";
+import React from 'react'
+import { TableContext } from '../Context/TableContext';
+import { VistaParcial } from './VistaParcial'
 
-export const TableAPI = () => {  
-
-
+function TableApi() {
+  
 const {
   volver,
   niveles,
@@ -19,15 +17,9 @@ const {
 
   return (
     <React.Fragment>
-      <section className="container">
-      {/* <button className="btn btn-dark" onClick={() => volver(informacion.length-1)}>Regresar</button> */}
-      <br />
-      {
-        informacion.map((item, index) =>(
-          <a className="pe-2" key={index} href="/#" onClick={()=>volver(index)}>{`${item.nivel} ${item.descrip}>`}</a>
-        ))
-      }
-      {/* <h2>Nivel {niveles-1} <h3>{descripcion}</h3></h2> */}
+
+      <section className="container mb-3">
+      
 
     <table className="table" id="tableMaterials">
   <thead>
@@ -54,10 +46,17 @@ const {
                   <td><button type="button" className="btn btn-dark btn-sm" onClick={() =>{setDescripcion(item.descriSpa); getNiveles(item.idOmc23N1? item.idOmc23N1 : item.idOmc23N2 ? item.idOmc23N2 : item.idOmc23N3? item.idOmc23N3 : item.idOmc23N4 ? item.idOmc23N4 : item.idOmc23N5 ? item.idOmc23N5 : item.idOmc23N6);}}>{item.regFinal ? 'Seleccionar' : `Nivel ${niveles}`}</button> </td>
                 }
             </tr>
-        ))
+        )) 
     }
   </tbody>
 </table>
+{/* <button className="btn btn-dark" onClick={() => volver(informacion.length-1)}>Regresar</button> */}
+      {
+        informacion.map((item, index) =>(
+          <a className="pe-2" key={index} href="/#" onClick={()=>volver(index)}>{`${item.nivel} ${item.descrip}>`}</a>
+        ))
+      }
+      {/* <h2>Nivel {niveles-1} <h3>{descripcion}</h3></h2> */}
       </section>
 
     {
@@ -67,3 +66,5 @@ const {
   </React.Fragment>
   );
 };
+
+export {TableApi}

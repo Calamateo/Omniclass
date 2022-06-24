@@ -24,6 +24,8 @@ function TableProvider(props){
   const [concreto, setConcreto] = React.useState('');
   const [vistaParcial, setVistaParcial] = React.useState({})
   const [formularioActivate, setFormularioActivate] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [tableBool, setTablesBool] = React.useState(false);
   const [listarEsfuerzo,  setListarEsfuerzo] = React.useState([])
   const [listarValorEsfuerzo, setListarValorEsfuerzo] = React.useState([])
   const [listarUnidadesMedida, setListarUnidadesMedida] = React.useState([])
@@ -37,8 +39,10 @@ function TableProvider(props){
   const [listarFlujoRev, setListarFlujoRev] = React.useState([])
   const [listarIonCloruro, setListarIonCloruro] = React.useState([])
   const [listarFibraConcre, setListarFibraConcre] = React.useState([])
-  
-  
+  const [omniClass, setOmniClass] = React.useState(23)  
+  const [datosModal, setDatosModal] = React.useState('')
+
+
 
   //UseEffect initializes the Api
   React.useEffect(() => {
@@ -52,38 +56,8 @@ function TableProvider(props){
   //Get API
   const fetchData = async () => {
     
-    //Level 1 data
-    const data = await fetch(`${URL}OMC23Nivel1/`,)
-    const users = await data.json();
-    await setNivel1(users.results);    
-    await console.table(users.results);
-    await setDatos(users.results);
-
-    //Level 2 data
-    const data2 = await fetch(`${URL}OMC23Nivel2/`)
-    const users2 = await data2.json();
-    await setNivel2(users2.results);  
-
-    //Level 3 data
-    const data3 = await fetch(`${URL}OMC23Nivel3/`)
-    const users3 = await data3.json();
-    await setNivel3(users3.results);    
-
-    //Level 4 data
-    const data4 = await fetch(`${URL}OMC23Nivel4/`)
-    const users4 = await data4.json();
-    await setNivel4(users4.results);    
-
-    //Level 5 data
-    const data5 = await fetch(`${URL}OMC23Nivel5/`)
-    const users5 = await data5.json();
-    await setNivel5(users5.results);    
-
-
-    //Level 6 data
-    const data6 = await fetch(`${URL}OMC23Nivel6/`)
-    const users6 = await data6.json();
-    await setNivel6(users6.results);    
+    apis();
+    setOmniClass(41);
 
     const materials = await fetch(`${URL}Materiales/`)
     const materialsData = await materials.json();
@@ -141,8 +115,46 @@ function TableProvider(props){
     const listarFibraConcre = await fetch(`${URL}ListarFibraConcre/`)
     const listarFibraConcreData = await listarFibraConcre.json();
     await setListarFibraConcre(listarFibraConcreData.results);
-
+    
   };
+
+  const apis = async () => {
+     //Level 1 data
+     const data = await fetch(`${URL}OMC${omniClass}Nivel1/`)
+     const users = await data.json();
+     await setNivel1(users.results);    
+    //  await console.table(users.results);
+     await setDatos(users.results);
+     console.log(`${URL}OMC${omniClass}Nivel1/`);
+     console.table(users.results);
+ 
+     //Level 2 data
+     const data2 = await fetch(`${URL}OMC${omniClass}Nivel2/`)
+     const users2 = await data2.json();
+     await setNivel2(users2.results);  
+    //  await console.table(users2.results);
+ 
+     //Level 3 data
+     const data3 = await fetch(`${URL}OMC${omniClass}Nivel3/`)
+     const users3 = await data3.json();
+     await setNivel3(users3.results);    
+    //  await console.table(users3.results);
+ 
+     //Level 4 data
+     const data4 = await fetch(`${URL}OMC${omniClass}Nivel4/`)
+     const users4 = await data4.json();
+     await setNivel4(users4.results);    
+ 
+     //Level 5 data
+     const data5 = await fetch(`${URL}OMC${omniClass}Nivel5/`)
+     const users5 = await data5.json();
+     await setNivel5(users5.results);    
+     //Level 6 data
+     const data6 = await fetch(`${URL}OMC${omniClass}Nivel6/`)
+     const users6 = await data6.json();
+     await setNivel6(users6.results);    
+  }
+
 
   //get levels
   const getNiveles = (idLevel) => {
@@ -170,49 +182,74 @@ function TableProvider(props){
 
   
   const getNivel2 = async (idLevel) => {
+    if (!tableBool){
     const reg = nivel2.filter(reg => reg.fk_Omc23N1 === idLevel);
     await setDatos(reg) 
     await setNivel2View(reg);
+    } else {
+    const reg = nivel2.filter(reg => reg.fk_Omc41N1 === idLevel);
+    await setDatos(reg) 
+    await setNivel2View(reg);
+    }
     setNiveles("3")
-    await console.log(descripcion)
+    // await console.log(descripcion)
     await setInformacion([...informacion,{nivel:'Nivel 1', descrip: descripcion }]);
-    console.table(reg);
-    console.table(informacion);
+    // console.table(informacion);
   }
   const getNivel3 = async (idLevel) => {
+    if (!tableBool){
     const reg = nivel3.filter(reg => reg.fk_Omc23N2 === idLevel);
     await setDatos(reg) 
     await setNivel3View(reg);
+    } else {
+    const reg = nivel3.filter(reg => reg.fk_Omc41N2 === idLevel);
+    await setDatos(reg) 
+    await setNivel3View(reg);
+    }
     setNiveles("4")
     setInformacion([...informacion,{nivel:'Nivel 2', descrip: descripcion}]);
-    console.table(reg);
-    console.table(informacion);
+    // console.table(informacion);
   }
   const getNivel4 = async (idLevel) => {
+    if (!tableBool){
     const reg = nivel4.filter(reg => reg.fk_Omc23N3 === idLevel);
     await setDatos(reg) 
     await setNivel4View(reg);
+    } else {
+    const reg = nivel4.filter(reg => reg.fk_Omc41N3 === idLevel);
+    await setDatos(reg) 
+    await setNivel4View(reg);
+    }
     setNiveles("5")
     setInformacion([...informacion,{nivel:'Nivel 3', descrip: descripcion}]);
-    console.table(reg);
-    console.table(informacion);
+    // console.table(informacion);
   }
   const getNivel5 = async (idLevel) => {
+    if (!tableBool){
     const reg = nivel5.filter(reg => reg.fk_Omc23N4 === idLevel);
     await setDatos(reg) 
     await setNivel5View(reg);
+    } else {
+    const reg = nivel5.filter(reg => reg.fk_Omc41N4 === idLevel);
+    await setDatos(reg) 
+    await setNivel5View(reg);
+    }
     setNiveles("6")
     setInformacion([...informacion,{nivel:'Nivel 4', descrip: descripcion}]);
-    console.table(reg);
-    console.table(informacion);
+    // console.table(informacion);
   }
   const getNivel6 = async (idLevel) => {
+    if (!tableBool){
     const reg = nivel6.filter(reg => reg.fk_Omc23N5 === idLevel);
     await setDatos(reg) 
     setNiveles("7")
+    } else {
+    const reg = nivel6.filter(reg => reg.fk_Omc41N5 === idLevel);
+    await setDatos(reg) 
+    setNiveles("7")
+    }
     setInformacion([...informacion,{nivel:'Nivel 5', descrip: descripcion}]);
-    console.table(reg);
-    console.table(informacion);
+    // console.table(informacion);
   }
  //Return Values
   const volver = (valor) => {
@@ -267,6 +304,54 @@ function TableProvider(props){
     await setVistaParcial(reg)
     setFormularioActivate(true)
   }
+
+
+
+  const omniclass41 = async () => {
+    volver(0)
+    setTablesBool(!tableBool)
+      await setOmniClass(41)
+      console.log('es falso');
+      console.log(omniClass)
+      apis()
+      setTimeout(() => {
+        setOmniClass(23)
+        console.log(omniClass)
+        setLoading(false);
+      }, 2000);
+    // setOmniClass(valor);
+    // console.log(omniClass);
+    // apis();
+    // setTimeout(() => {
+    //   volver(0);
+    //   console.log(omniClass);
+    //   console.table(nivel1);  
+    //   setLoading(false);
+    // }, 1000);
+    // setTablesBool(!tableBool);
+    setLoading(true);
+    // console.table(nivel1);
+  }
+
+  const omniclass23 = () => {
+    volver(0)
+    setTablesBool(!tableBool)
+    setOmniClass(23);
+    console.log(omniClass);
+    apis();
+    setLoading(true);
+    setTimeout(() => {
+      setOmniClass(41)
+      console.log(omniClass)
+      
+      setLoading(false);
+    }, 2000);
+  }
+
+  const descripcioncorta = () => {
+    
+  }
+
   return (    
     <TableContext.Provider value ={{
         volver,
@@ -296,6 +381,14 @@ function TableProvider(props){
         setFormularioActivate,
         listarIonCloruro,
         listarFibraConcre,
+        omniclass23,
+        omniclass41,
+        omniClass,
+        tableBool,
+        loading,
+        descripcioncorta,
+        setDatosModal,
+        datosModal,
       }}>
         {props.children}
     </TableContext.Provider>
